@@ -1,28 +1,24 @@
-from flask import Flask, jsonify
+from fastapi import FastAPI, Response
+from fastapi.responses import JSONResponse
 
-app = Flask(__name__)
+app = FastAPI()
 
-# Route for /first (GET request)
-@app.route('/first', methods=['GET'])
+@app.get("/first")
 def first():
     headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer token123'
+        "Content-Type": "application/json",
+        "Authorization": "Bearer token123"
     }
-    return Response("", status=200, headers=headers)
+    return Response(status_code=200, headers=headers)
 
-
-# Route for /second (GET request, but responds with 400 + JSON body)
-@app.route('/second', methods=['GET'])
+@app.get("/second")
 def second():
-    response = jsonify({
-        'param1': 'value1',
-        'param2': 'value2'
-    })
-    response.status_code = 400  # Return 400 Bad Request as required
-    response.headers['Content-Type'] = 'application/json'
-    response.headers['Authorization'] = 'Bearer token123'
-    return response
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    data = {
+        "param1": "value1",
+        "param2": "value2"
+    }
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer token123"
+    }
+    return JSONResponse(content=data, status_code=400, headers=headers)
