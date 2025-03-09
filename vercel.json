@@ -1,7 +1,15 @@
-   "functions": {
-         "core/wsgi.py": {
-             "runtime": "@vercel/python@4.7.1"
-         }
-   "routes": [
-     { "src": "/(.*)", "dest": "api.py" }
-   ]
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "index.js"
+    }
+  ]
+}
