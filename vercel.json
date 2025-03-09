@@ -1,11 +1,6 @@
 "builds": [
      { "src": "api.py", "use": "@vercel/python" }
    ],
-   "functions": {
-         "core/wsgi.py": {
-             "runtime": "@vercel/python@4.7.1"
-         }
-   }
    "routes": [
      { "src": "/(.*)", "dest": "api.py" }
    ]
