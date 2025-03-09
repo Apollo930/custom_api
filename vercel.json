@@ -1,13 +1,14 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api.py", "use": "@vercel/python" }
+    { "src": "api/api.py", "use": "@vercel/python@4.7.1" }
   ],
   "functions": {
-        "core/wsgi.py": {
-            "runtime": "@vercel/python@4.7.1"
-        }
+    "api/api.py": {
+      "runtime": "@vercel/python@4.7.1"
+    }
+  },
   "routes": [
-    { "src": "/(.*)", "dest": "api.py" }
+    { "src": "/(.*)", "dest": "api/api.py" }
   ]
 }
