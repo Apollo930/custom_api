@@ -5,10 +5,10 @@ app = Flask(__name__)
 # Route for /first (GET request)
 @app.route('/first', methods=['GET'])
 def first():
-    response = Response(status=200) 
-    response.headers['Content-Type'] = 'application/json'
+    response = Response(response="{}", status=200, mimetype="application/json")
     response.headers['Authorization'] = 'Bearer token123'
     return response
+
 
 # Route for /second (GET request, but responds with 400 + JSON body)
 @app.route('/second', methods=['GET'])
