@@ -5,7 +5,7 @@ app = Flask(__name__)
 # Route for /first (GET request)
 @app.route('/first', methods=['GET'])
 def first():
-    response = make_response(None, 200)  # Empty JSON object
+    response = make_response({}, 200)  # Empty JSON object
     response.headers['Content-Type'] = 'application/json'
     response.headers['Authorization'] = 'Bearer token123'
     return response
