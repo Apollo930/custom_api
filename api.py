@@ -9,7 +9,7 @@ def first():
         'Content-Type': 'application/json',
         'Authorization': 'Bearer token123'
     }
-    return Response(status=200, headers=headers)
+    return Response("", status=200, headers=headers)
 
 
 # Route for /second (GET request, but responds with 400 + JSON body)
