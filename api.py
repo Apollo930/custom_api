@@ -58,7 +58,7 @@ async def delete_file(filename: str):
         url=url[0]
 
         vercel_blob.delete(url)
-        return RedirectResponse("/?messsage=Download Successful")
+        return RedirectResponse("/?messsage=Delete Successful")
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
