@@ -1,9 +1,13 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 import os
 
 app = FastAPI()
 
+@app.get("/", response_class=FileResponse)
+def home():
+    file_path = os.path.join("templates", "index.html")
+    return FileResponse(file_path)
 
 
 '''
