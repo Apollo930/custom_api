@@ -28,15 +28,30 @@ async def store_file(file: UploadFile = File(...)):
 
 @app.get('/d7/retrieve/{filename}')
 async def retrieve_file(filename: str):
-    file_url = os.path.join(BLOB_URL, "uploads", filename)
+@app.get('/d7/retrieve/{filename}')
+async def retrieve_file(filename: str):
     try:
-        download_url = vercel_blob.head(file_url).get("downloadUrl")
-        print(download_url)
-        if not download_url:
+        # Fetch the list of files from Vercel Blob
+        resp = vercel_blob.list()
+        blobs = resp.get("blobs", [])
+
+        # Find the actual file based on filename
+        matching_blob = next((blob for blob in blobs if blob["pathname"].endswith(f"/{filename}")), None)
+
+        if not matching_blob:
             raise HTTPException(status_code=404, detail="File not found")
-        return FileResponse(download_url, media_type="application/octet-stream", filename=filename)
+
+        # Get the correct download URL
+        download_url = matching_blob.get("downloadUrl")
+        if not download_url:
+            raise HTTPException(status_code=404, detail="Download URL not available")
+
+        # Redirect to the file URL
+        return RedirectResponse(url=download_url)
+
     except Exception as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+    
 
 @app.delete('/d7/delete/{filename}')
 async def delete_file(filename: str):
