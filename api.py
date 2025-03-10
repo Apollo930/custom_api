@@ -37,15 +37,14 @@ async def retrieve_file(filename: str):
         if not matching_blob:
             raise HTTPException(status_code=404, detail="File not found")
 
-        # Get the correct download URL
         download_url = matching_blob.get("downloadUrl")
         if not download_url:
             raise HTTPException(status_code=404, detail="Download URL not available")
 
-        # Redirect to the file URL
-        return RedirectResponse(url=download_url)
+        return FileResponse(download_url, media_type="application/octet-stream", filename=filename)
 
     except Exception as e:
+        print("couldn't even do anything")
         raise HTTPException(status_code=500, detail=str(e))
     
 
