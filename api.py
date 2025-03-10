@@ -32,14 +32,12 @@ async def retrieve_file(filename: str):
         resp = vercel_blob.list()
         blobs = resp.get("blobs", [])
         print(blobs)
-        matching_blob = next((blob for blob in blobs if blob["pathname"].endswith(f"/{filename}")), None)
+        url = [blob["url"] for blob in blobs if blob["pathname"].endswith(filename)]
 
-        if not matching_blob:
+        if not url:
             raise HTTPException(status_code=404, detail="File not found")
 
-        download_url = matching_blob.get("downloadUrl")
-        if not download_url:
-            raise HTTPException(status_code=404, detail="Download URL not available")
+        download_url = vercel_blob.head(url[0]).get("downloadUrl")
 
         return FileResponse(download_url, media_type="application/octet-stream", filename=filename)
 
