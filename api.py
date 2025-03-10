@@ -29,11 +29,9 @@ async def store_file(file: UploadFile = File(...)):
 @app.get('/d7/retrieve/{filename}')
 async def retrieve_file(filename: str):
     try:
-        # Fetch the list of files from Vercel Blob
         resp = vercel_blob.list()
         blobs = resp.get("blobs", [])
-
-        # Find the actual file based on filename
+        print(blobs)
         matching_blob = next((blob for blob in blobs if blob["pathname"].endswith(f"/{filename}")), None)
 
         if not matching_blob:
