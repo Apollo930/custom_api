@@ -1,5 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException, Request
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, StreamingResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, StreamingResponse, RedirectResponse
 import os
 import io, vercel_blob
 
@@ -26,8 +26,6 @@ async def store_file(file: UploadFile = File(...)):
     except Exception as e:
         return {"error": str(e)}
 
-@app.get('/d7/retrieve/{filename}')
-async def retrieve_file(filename: str):
 @app.get('/d7/retrieve/{filename}')
 async def retrieve_file(filename: str):
     try:
