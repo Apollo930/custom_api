@@ -62,7 +62,7 @@ async def delete_file(filename: str):
     window.location.href = "/";
 </script>
 """
-        return RedirectResponse(content=html_content)
+        return HTMLResponse(content=html_content)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
