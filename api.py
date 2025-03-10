@@ -25,7 +25,7 @@ For storage api (Speedathon 2025 Prelims Q7)
 async def store_file(file: UploadFile = File(...)):
     try:
         file_content = await file.read()
-        blob = vercel_blob.put(f"uploads/{file.filename}", file_content, access="public")
+        blob = vercel_blob.put(f"uploads/{file.filename}", file_content )
         return {"message": "File uploaded successfully", "url": blob["url"]}
     except Exception as e:
         return {"error": str(e)}
