@@ -26,7 +26,7 @@ async def store_file(file: UploadFile = File(...)):
     try:
         file_content = await file.read()
         blob = vercel_blob.put(f"uploads/{file.filename}", file_content )
-        return {"message": "File uploaded successfully", "url": blob["url"]}
+        return {"message": "File uploaded successfully"}
     except Exception as e:
         return {"error": str(e)}
 
@@ -52,8 +52,8 @@ async def delete_file(filename: str):
 @app.get("/d7/listfiles")
 async def listfiles():
     try:
-        blobs = vercel_blob.list()
-        filenames = [blob["url"].split("/")[-1] for blob in blobs if "uploads/" in blob["url"]]
+        blobs = vercel_blob.list({'prefix':"uploads"})
+        filenames = [blob["url"].split("/")[-1] for blob in blobs]
         return JSONResponse(content={"files": filenames}, status_code=200)
     except Exception as e:
         return JSONResponse(content={"error": "Failed to list files", "details": str(e)}, status_code=400)
