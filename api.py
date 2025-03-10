@@ -10,7 +10,7 @@ app = FastAPI()
 For storage api (Speedathon 2025 Prelims Q7)
 '''
 
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = '/tmp/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @app.post('/d7/store')
