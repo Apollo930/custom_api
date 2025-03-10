@@ -22,7 +22,7 @@ async def store_file(file: UploadFile = File(...)):
     try:
         file_content = await file.read()
         blob = vercel_blob.put(f"uploads/{file.filename}", file_content )
-        return {"message": "File uploaded successfully"}
+        return {"message": f"File uploaded successfully as {file.filename}"}
     except Exception as e:
         return {"error": str(e)}
 
@@ -31,6 +31,7 @@ async def retrieve_file(filename: str):
     file_url = os.path.join(BLOB_URL, "uploads", filename)
     try:
         download_url = vercel_blob.head(file_url).get("downloadUrl")
+        print(download_url)
         if not download_url:
             raise HTTPException(status_code=404, detail="File not found")
         return FileResponse(download_url, media_type="application/octet-stream", filename=filename)
