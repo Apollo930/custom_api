@@ -37,12 +37,10 @@ async def retrieve_file(filename: str):
             raise HTTPException(status_code=404, detail="File not found")
 
         download_url = vercel_blob.head(url[0]).get("downloadUrl")
-        print(download_url)
 
         return RedirectResponse(url=download_url)
     
     except Exception as e:
-        print("couldn't even do anything")
         raise HTTPException(status_code=500, detail=str(e))
     
 
@@ -58,7 +56,13 @@ async def delete_file(filename: str):
         url=url[0]
 
         vercel_blob.delete(url)
-        return RedirectResponse("/?messsage=Delete Successful")
+        html_content = """
+<script>
+    alert("File deleted successfully!");
+    window.location.href = "/";
+</script>
+"""
+        return RedirectResponse(html_content))
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
