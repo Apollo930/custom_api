@@ -53,6 +53,6 @@ async def delete_file(filename: str):
 async def listfiles():
     try:
         resp = vercel_blob.list()
-        return JSONResponse(content=resp, status_code=200)
+        return JSONResponse(content={"files": resp.get("blobs", [])}, status_code=200)
     except Exception as e:
         return JSONResponse(content={"error": "Failed to list files", "details": str(e)}, status_code=400)
