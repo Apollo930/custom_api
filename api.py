@@ -39,8 +39,8 @@ async def retrieve_file(filename: str):
 
         download_url = vercel_blob.head(url[0]).get("downloadUrl")
 
-        return FileResponse(download_url, media_type="application/octet-stream", filename=filename)
-
+        return RedirectResponse(url=download_url)
+    
     except Exception as e:
         print("couldn't even do anything")
         raise HTTPException(status_code=500, detail=str(e))
