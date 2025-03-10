@@ -32,7 +32,7 @@ async def store_file(file: UploadFile = File(...)):
 
 @app.get('/d7/retrieve/{filename}')
 async def retrieve_file(filename: str):
-    file_url = os.path.join(PROJECT_LINK, "uploads", filename)
+    file_url = os.path.join("uploads", filename)
     try:
         download_url = vercel_blob.head(file_url).get("downloadUrl")
         if not download_url:
