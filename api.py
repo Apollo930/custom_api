@@ -1,35 +1,37 @@
-from flask import Flask, request, send_file, jsonify
+from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.responses import FileResponse
 import os
 
-app = Flask(__name__)
+app = FastAPI()
+
+
+
+'''
+For storage api (Speedathon 2025 Prelims Q7)
+'''
+
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-@app.route('/store', methods=['POST'])
-def store_file():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
+@app.post('/d7/store')
+async def store_file(file: UploadFile = File(...)):
     file_path = os.path.join(UPLOAD_FOLDER, file.filename)
-    file.save(file_path)
-    return jsonify({'message': 'File uploaded successfully'}), 201
+    with open(file_path, 'wb') as f:
+        f.write(await file.read())
+    return {"message": "File uploaded successfully"}
 
-@app.route('/retrieve/<filename>', methods=['GET'])
-def retrieve_file(filename):
+@app.get('/d7/retrieve/{filename}')
+async def retrieve_file(filename: str):
     file_path = os.path.join(UPLOAD_FOLDER, filename)
     if os.path.exists(file_path):
-        return send_file(file_path)
-    return jsonify({'error': 'File not found'}), 404
+        return FileResponse(file_path)
+    raise HTTPException(status_code=404, detail="File not found")
 
-@app.route('/delete/<filename>', methods=['DELETE'])
-def delete_file(filename):
+@app.delete('/d7/delete/{filename}')
+async def delete_file(filename: str):
     file_path = os.path.join(UPLOAD_FOLDER, filename)
     if os.path.exists(file_path):
         os.remove(file_path)
-        return jsonify({'message': 'File deleted successfully'}), 200
-    return jsonify({'error': 'File not found'}), 404
+        return {"message": "File deleted successfully"}
+    raise HTTPException(status_code=404, detail="File not found")
 
-if __name__ == '__main__':
-    app.run(debug=True)

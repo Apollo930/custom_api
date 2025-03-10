@@ -1,5 +1,5 @@
-from api import app  # Import your Flask app from api.py
-import vercel_wsgi
+from api import app
+from fastapi import FastAPI
 
-# Export the app for Vercel
-app = vercel_wsgi.app
+# Use FastAPI directly in the WSGI wrapper
+app = app
