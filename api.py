@@ -21,7 +21,7 @@ For storage api (Speedathon 2025 Prelims Q7)
 async def store_file(file: UploadFile = File(...)):
     try:
         file_content = await file.read()
-        blob = vercel_blob.put(f"uploads/{file.filename}", file_content )
+        vercel_blob.put(f"uploads/{file.filename}", file_content )
         return {"message": f"File uploaded successfully as {file.filename}"}
     except Exception as e:
         return {"error": str(e)}
@@ -31,13 +31,13 @@ async def retrieve_file(filename: str):
     try:
         resp = vercel_blob.list()
         blobs = resp.get("blobs", [])
-        print(blobs)
         url = [blob["url"] for blob in blobs if blob["pathname"].endswith(filename)]
 
         if not url:
             raise HTTPException(status_code=404, detail="File not found")
 
         download_url = vercel_blob.head(url[0]).get("downloadUrl")
+        print(download_url)
 
         return RedirectResponse(url=download_url)
     
@@ -49,8 +49,16 @@ async def retrieve_file(filename: str):
 @app.delete('/d7/delete/{filename}')
 async def delete_file(filename: str):
     try:
-        vercel_blob.delete(f"uploads/{filename}")
-        return {"message": "File deleted successfully"}
+        resp = vercel_blob.list()
+        blobs = resp.get("blobs", [])
+        url = [blob["url"] for blob in blobs if blob["pathname"].endswith(filename)]
+
+        if not url:
+            raise HTTPException(status_code=404, detail="File not found")
+        url=url[0]
+
+        vercel_blob.delete(url)
+        return RedirectResponse("/?messsage=Download Successful")
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
