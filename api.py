@@ -46,7 +46,7 @@ async def retrieve_file(filename: str):
         raise HTTPException(status_code=500, detail=str(e))
     
 
-@app.post('/d7/delete/')
+@app.get('/d7/delete/')
 async def delete_file(filename: str):
     try:
         resp = vercel_blob.list()
