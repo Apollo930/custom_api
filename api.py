@@ -4,11 +4,7 @@ import os
 import io, vercel_blob
 
 app = FastAPI()
-VERCEL_BLOB_API = "https://api.vercel.com/v2/blob/put"
-VERCEL_BLOB_LIST_API = "https://api.vercel.com/v2/blob/list"
-VERCEL_BLOB_DELETE_API = "https://api.vercel.com/v2/blob/delete"
-
-VERCEL_BLOB_READ_WRITE_TOKEN = os.getenv("BLOB_READ_WRITE_TOKEN")
+BLOB_URL = os.getenv("BLOB_URL")
 PROJECT_LINK = os.getenv("PROJECT_LINK")
 
 @app.get("/", response_class=FileResponse)
@@ -32,7 +28,7 @@ async def store_file(file: UploadFile = File(...)):
 
 @app.get('/d7/retrieve/{filename}')
 async def retrieve_file(filename: str):
-    file_url = os.path.join("uploads", filename)
+    file_url = os.path.join(BLOB_URL, "uploads", filename)
     try:
         download_url = vercel_blob.head(file_url).get("downloadUrl")
         if not download_url:
