@@ -1,5 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 import os
 
 app = FastAPI()
@@ -39,3 +39,10 @@ async def delete_file(filename: str):
         return {"message": "File deleted successfully"}
     raise HTTPException(status_code=404, detail="File not found")
 
+@app.get("/d7/listfiles")
+async def listfiles():
+    try:
+        files = os.listdir(UPLOAD_FOLDER)
+        return JSONResponse(content={"files": files}, status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
