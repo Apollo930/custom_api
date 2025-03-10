@@ -52,8 +52,7 @@ async def delete_file(filename: str):
 @app.get("/d7/listfiles")
 async def listfiles():
     try:
-        blobs = vercel_blob.list({'prefix':"uploads"})
-        filenames = [blob["url"].split("/")[-1] for blob in blobs]
-        return JSONResponse(content={"files": filenames}, status_code=200)
+        resp = vercel_blob.list()
+        return JSONResponse(content=resp, status_code=200)
     except Exception as e:
         return JSONResponse(content={"error": "Failed to list files", "details": str(e)}, status_code=400)
