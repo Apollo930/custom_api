@@ -9,10 +9,12 @@ router = APIRouter()
 async def home():
     return {"message": "Welcome to New API!"}
 
+from typing import Union
+
 class CalculationRequest(BaseModel):
     operation: str
-    num1: float
-    num2: float
+    num1: Union[int, float]
+    num2: Union[int, float]
 
 @router.post("/calculate")
 async def calculate(request: CalculationRequest):
