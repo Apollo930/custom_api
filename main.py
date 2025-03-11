@@ -2,7 +2,7 @@ from fastapi import FastAPI, File, UploadFile, HTTPException, Request
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, StreamingResponse, RedirectResponse
 import os, io, vercel_blob
 
-from storage_api import routes as storage_router
+from storage_api.routes import router as storage_router
 
 app = FastAPI()
 BLOB_URL = os.getenv("BLOB_URL")
