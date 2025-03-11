@@ -18,17 +18,26 @@ class CalculationRequest(BaseModel):
 
 @router.post("/calculate")
 async def calculate(request: CalculationRequest):
+    if request.operation in ["div", "mod"] and request.num2 == 0:
+        return JSONResponse(status_code=418, content={
+            "operation": request.operation,
+            "num1": request.num1,
+            "num2": request.num2,
+            "success": False,
+            "message": "Division by zero is not allowed"
+        })
+    
     operations = {
         "add": lambda x, y: x + y,
         "sub": lambda x, y: x - y,
         "mul": lambda x, y: x * y,
-        "div": lambda x, y: x / y if y != 0 else None,
+        "div": lambda x, y: x / y,
         "pow": lambda x, y: x ** y,
-        "mod": lambda x, y: x % y if y != 0 else None,
+        "mod": lambda x, y: x % y,
     }
     
     if request.operation not in operations:
-        raise HTTPException(status_code=418, detail={
+        return JSONResponse(status_code=418, content={
             "operation": request.operation,
             "num1": request.num1,
             "num2": request.num2,
@@ -38,21 +47,13 @@ async def calculate(request: CalculationRequest):
     
     try:
         result = operations[request.operation](request.num1, request.num2)
-        if result is None:
-            raise JSONResponse(status_code=418, detail={
-                "operation": request.operation,
-                "num1": request.num1,
-                "num2": request.num2,
-                "success": False,
-                "message": "Division by zero is not allowed"
-            })
         
         # Convert result to int if it's a whole number
         if isinstance(result, float) and result.is_integer():
             result = int(result)
     
     except Exception as e:
-        raise JSONResponse(status_code=418, detail={
+        return JSONResponse(status_code=418, content={
             "operation": request.operation,
             "num1": request.num1,
             "num2": request.num2,
