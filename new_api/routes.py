@@ -44,6 +44,11 @@ async def calculate(request: CalculationRequest):
                 "success": False,
                 "message": "Division by zero is not allowed"
             })
+        
+        # Convert result to int if it's a whole number
+        if isinstance(result, float) and result.is_integer():
+            result = int(result)
+    
     except Exception as e:
         raise HTTPException(status_code=418, detail={
             "operation": request.operation,
