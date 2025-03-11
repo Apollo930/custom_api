@@ -1,23 +1,15 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException, Request
+from fastapi import FastAPI, File, UploadFile, HTTPException, APIRouter, Request
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, StreamingResponse, RedirectResponse
-import os
-import io, vercel_blob
+import os, io, vercel_blob
 
-app = FastAPI()
-BLOB_URL = os.getenv("BLOB_URL")
-PROJECT_LINK = os.getenv("PROJECT_LINK")
 
-@app.get("/", response_class=FileResponse)
-def home():
-    file_path = os.path.join("templates", "index.html")
-    return FileResponse(file_path)
-
+router = APIRouter()
 
 '''
 For storage api (Speedathon 2025 Prelims Q7)
 '''
 
-@app.post('/d7/store')
+@router.post('/store')
 async def store_file(file: UploadFile = File(...)):
     try:
         file_content = await file.read()
@@ -26,7 +18,7 @@ async def store_file(file: UploadFile = File(...)):
     except Exception as e:
         return {"error": str(e)}
 
-@app.get('/d7/retrieve/')
+@router.get('/retrieve/')
 async def retrieve_file(filename: str):
     try:
         resp = vercel_blob.list()
@@ -44,7 +36,7 @@ async def retrieve_file(filename: str):
         raise HTTPException(status_code=500, detail=str(e))
     
 
-@app.get('/d7/delete/')
+@router.get('/delete/')
 async def delete_file(filename: str):
     try:
         resp = vercel_blob.list()
@@ -66,7 +58,7 @@ async def delete_file(filename: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@app.get("/d7/listfiles")
+@router.get("/listfiles")
 async def listfiles():
     try:
         resp = vercel_blob.list()
