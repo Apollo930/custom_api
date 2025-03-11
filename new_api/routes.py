@@ -39,7 +39,7 @@ async def calculate(request: CalculationRequest):
     try:
         result = operations[request.operation](request.num1, request.num2)
         if result is None:
-            raise HTTPException(status_code=418, detail={
+            raise JSONResponse(status_code=418, detail={
                 "operation": request.operation,
                 "num1": request.num1,
                 "num2": request.num2,
@@ -52,7 +52,7 @@ async def calculate(request: CalculationRequest):
             result = int(result)
     
     except Exception as e:
-        raise HTTPException(status_code=418, detail={
+        raise JSONResponse(status_code=418, detail={
             "operation": request.operation,
             "num1": request.num1,
             "num2": request.num2,
