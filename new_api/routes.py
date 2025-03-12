@@ -2,6 +2,8 @@ from fastapi import FastAPI, APIRouter, File, UploadFile, HTTPException, Request
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, StreamingResponse, RedirectResponse
 from pydantic import BaseModel
 import os, io, vercel_blob
+from typing import Union
+
 
 router = APIRouter()
 
@@ -9,18 +11,11 @@ router = APIRouter()
 async def home():
     return {"message": "Welcome to New API!"}
 
-from typing import Union
 
 class CalculationRequest(BaseModel):
     operation: str
     num1: Union[int, float]
     num2: Union[int, float]
-
-@router.post("/calculate")
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel
-from typing import Union
 
 app = FastAPI()
 
