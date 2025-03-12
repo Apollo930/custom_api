@@ -10,15 +10,12 @@ router = APIRouter()
 async def home():
     return {"message": "Welcome to New API!"}
 
-
-app = FastAPI()
-
 class CalculationRequest(BaseModel):
     operation: str
     num1: Union[int, float]
     num2: Union[int, float]
 
-@app.post("/calculate")
+@router.post("/calculate")
 async def calculate(request: CalculationRequest):
     if request.num1 is None or request.num2 is None or request.operation is None:
         return JSONResponse(status_code=418, content={
