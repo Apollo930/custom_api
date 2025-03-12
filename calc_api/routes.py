@@ -11,9 +11,9 @@ async def home():
     return {"message": "Welcome to New API!"}
 
 class CalculationRequest(BaseModel):
-    operation: str
-    num1: Union[int, float]
-    num2: Union[int, float]
+    operation: Union[str, None] = None
+    num1: Union[int, float, None] = None
+    num2: Union[int, float, None] = None
 
 @router.post("/calculate")
 async def calculate(request: CalculationRequest):
