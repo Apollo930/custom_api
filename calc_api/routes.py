@@ -1,7 +1,6 @@
-from fastapi import FastAPI, APIRouter, File, UploadFile, HTTPException, Request
+from fastapi import FastAPI, APIRouter, File, UploadFile, HTTPException
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, StreamingResponse, RedirectResponse
 from pydantic import BaseModel
-import os, io, vercel_blob
 from typing import Union
 
 
@@ -12,27 +11,22 @@ async def home():
     return {"message": "Welcome to New API!"}
 
 
+app = FastAPI()
+
 class CalculationRequest(BaseModel):
     operation: str
     num1: Union[int, float]
     num2: Union[int, float]
 
-app = FastAPI()
-
-class CalculationRequest(BaseModel):
-    operation: str
-    num1: Union[int, float, None] = None
-    num2: Union[int, float, None] = None
-
 @app.post("/calculate")
 async def calculate(request: CalculationRequest):
-    if request.num1 is None or request.num2 is None:
+    if request.num1 is None or request.num2 is None or request.operation is None:
         return JSONResponse(status_code=418, content={
             "operation": request.operation,
             "num1": request.num1,
             "num2": request.num2,
             "success": False,
-            "message": "Missing number(s)"
+            "message": "Missing number/operation(s)"
         })
 
     operations = {
